@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf8">
+  <title>Under Construction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Titillium+Web:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #9c27b0;
+      --iridescent1: #c471ed;
+      --iridescent2: #f64f59;
+      --iridescent3: #12c2e9;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Titillium Web', sans-serif;
+      font-weight: 600;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      min-height: 100vh;
+      color: var(--light);
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Stars */
+    .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 5s infinite; }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* Sparkles */
+    .sparkle-dot {
+      position: fixed;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--iridescent1), var(--iridescent3));
+      animation: sparkle 3s infinite;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes sparkle {
+      0%, 100% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Emoji scroll strips */
+    .emoji-strip {
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      padding: 18px 0;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+
+      flex-shrink: 0;
+    }
+
+    .emoji-strip.bottom {
+      border-bottom: none;
+    }
+
+    .emoji-track {
+      display: flex;
+      gap: 20px;
+      width: max-content;
+      animation: emoji-scroll 30s linear infinite;
+    }
+
+    .emoji-strip.bottom .emoji-track {
+      animation: emoji-scroll-reverse 30s linear infinite;
+    }
+
+    @keyframes emoji-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @keyframes emoji-scroll-reverse {
+      0%   { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+
+    .emoji-item {
+      font-size: 1.6rem;
+      line-height: 1;
+      flex-shrink: 0;
+      filter: saturate(0.85);
+      transition: transform 0.2s ease;
+    }
+
+    .emoji-item:hover {
+      transform: scale(1.3);
+      filter: saturate(1);
+    }
+
+    /* Center content */
+    .center-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      padding: 40px 20px;
+    }
+
+    .main-text {
+      font-family: 'Caveat Brush', cursive;
+      font-size: clamp(2.2rem, 6vw, 3rem);
+      font-weight: 700;
+      color: white;
+      text-align: center;
+      text-shadow:
+        0 0 20px rgba(196,113,237,0.3),
+        0 0 40px rgba(18,194,233,0.15);
+      line-height: 1.3;
+      animation: fadeInUp 1s ease-out both;
+      max-width: 700px;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Image cycler */
+    .img-cycler {
+      width: 200px;
+      height: 200px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.15);
+      box-shadow: 0 0 20px rgba(196,113,237,0.3);
+      position: relative;
+      margin-bottom: 28px;
+      animation: fadeInUp 0.8s ease-out both;
+      flex-shrink: 0;
+    }
+
+    .img-cycler-frame {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+    .img-cycler-frame.active {
+      display: block;
+    }
+
+    /* Glowing orb behind text */
+    .glow-orb {
+      position: absolute;
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,113,237,0.12) 0%, rgba(18,194,233,0.06) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+      animation: orbPulse 6s ease-in-out infinite;
+    }
+
+    @keyframes orbPulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<!-- Top emoji scroll -->
+<div class="emoji-strip" id="emoji-top"></div>
+
+<!-- Center message -->
+<div class="center-content">
+  <div class="glow-orb"></div>
+  <div class="img-cycler" id="img-cycler"></div>
+  <div class="main-text">under construction,<br>check back soon! 💫</div>
+</div>
+
+<!-- Bottom emoji scroll -->
+<div class="emoji-strip bottom" id="emoji-bottom"></div>
+
+<script>
+// Stars
+function createStars() {
+  const container = document.getElementById('stars');
+  for (let i = 0; i < 150; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 3 + 1;
+    star.style.cssText = `
+      left: ${Math.random()*100}%;
+      top: ${Math.random()*100}%;
+      width: ${size}px;
+      height: ${size}px;
+      animation-delay: ${Math.random()*5}s;
+    `;
+    container.appendChild(star);
+  }
+}
+
+// Sparkles
+function createSparkles() {
+  setInterval(() => {
+    const s = document.createElement('div');
+    s.className = 'sparkle-dot';
+    s.style.left = Math.random()*100 + '%';
+    s.style.top = Math.random()*100 + '%';
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 3000);
+  }, 350);
+}
+
+// Emoji strips
+function buildEmojiStrip(containerId) {
+  const emojis = [
+    '💫','🎨','🌙','🩰','🇨🇳','💃','🎤','🪞','🫖','👁️',
+    '🧠','🫧','🐦‍🔥','🐊','🎊','💚','🪆','💐','☎️','🍎',
+    '🏡','🦋','❤️‍🔥','🫀','🌦️','🏗️','🩻','🕺','🛠️','📚',
+    '🐯','🪷','🧩','🫦','☀️','🎏','🫕','👯','🪺','💅'
+  ];
+  const container = document.getElementById(containerId);
+  const track = document.createElement('div');
+  track.className = 'emoji-track';
+  // Double for seamless loop
+  const doubled = [...emojis, ...emojis];
+  doubled.forEach(e => {
+    const span = document.createElement('span');
+    span.className = 'emoji-item';
+    span.textContent = e;
+    track.appendChild(span);
+  });
+  container.appendChild(track);
+}
+
+// Image cycler
+function buildAndStartCycler() {
+  const images = [
+    'autoencoder.jpg',
+    'chinese.jpg',
+    'familiar_old.jpg',
+    'moonlighters.png',
+    'mosaic.jpg',
+    'room.jpg',
+  ];
+
+  const cycler = document.getElementById('img-cycler');
+  images.forEach((src, i) => {
+    const img = document.createElement('img');
+    img.className = 'img-cycler-frame' + (i === 0 ? ' active' : '');
+    img.src = src;
+    img.alt = '';
+    cycler.appendChild(img);
+  });
+
+  let idx = 0;
+  setInterval(() => {
+    const frames = cycler.querySelectorAll('.img-cycler-frame');
+    frames[idx].classList.remove('active');
+    idx = (idx + 1) % frames.length;
+    frames[idx].classList.add('active');
+  }, 210);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  createStars();
+  createSparkles();
+  buildEmojiStrip('emoji-top');
+  buildEmojiStrip('emoji-bottom');
+  buildAndStartCycler();
+});
+</script>
+
+</body>
+</html>
